@@ -1,35 +1,28 @@
-# Complementary scenario: 3 nodes in region eur (3+3)
+# Complementary scenario: three nodes in region `eur` (3+3)
 
-The main setup reproduces the PoC (3 nodes in usa, 1 in eur). This scenario adds eur2 and eur3 (zones 2 and 3)
-to check, with measurements, what changes when region eur has its own quorum:
-- Test 1, MODE=restricted: does the native PLACEMENT RESTRICTED isolate eur now?
-- Test 1, MODE=poc3: the PoC's manual zones with 3 replicas in eur.
-- Test 2 (script 21): one eur node down (G1) and the whole eur region down (G2).
-Test 3 is not repeated: the cross-region latency does not depend on the number of eur nodes.
+The main topology reproduces the original proof of concept (3 nodes in `usa`, 1 in `eur`). This scenario adds
+`eur2` and `eur3` (zones 2 and 3) to show what changes when region `eur` has its own quorum.
+Results: `results/3x3_complementary/`.
 
-## Run order (in Ubuntu/WSL, inside the folder)
+What is run:
+- Experiment 1 with `MODE=restricted` (native PLACEMENT RESTRICTED) and `MODE=poc3` (manual zone configs with
+  three replicas in `eur`).
+- Experiment 2 with `scripts/21_test_failover_eur3.sh`: G0 (all nodes up), G1 (`eur2` down) and G2 (the whole
+  `eur` region down).
+- Experiment 3 is not repeated: cross-region latency does not depend on the number of nodes per region.
+
 ```bash
-# 0. Keep the 3+1 results apart
-mv results results_3x1_20261110 && mkdir results
-
-# 1. Clean start with 6 nodes
 docker compose down -v
-export COMPOSE_FILE=docker-compose.yml:docker-compose.eur3.yml
+export COMPOSE_FILE=docker-compose.yml:docker-compose.eur3.yml   # 6 nodes
 export EXPECTED_NODES=6
 ./scripts/00_start_cluster.sh
 
-# 2. Test 1 in two configurations
 MODE=restricted ./scripts/01_load_schema.sh && ./scripts/10_test_isolation.sh
 MODE=poc3       ./scripts/01_load_schema.sh && ./scripts/10_test_isolation.sh
-
-# 3. Test 2 for the 3+3 scenario (runs on poc3, loaded last)
-./scripts/21_test_failover_eur3.sh
-
-# 4. Evidence
+./scripts/21_test_failover_eur3.sh          # runs on the configuration loaded last (poc3)
 ./scripts/99_collect_evidence.sh
 
-# 5. Back to the main setup afterwards
-docker compose down -v
+docker compose down -v                      # back to the main topology
 unset COMPOSE_FILE EXPECTED_NODES
 ```
-The two `export` lines hold only for that terminal: if you open another one, run them again before any script.
+The two `export` lines apply only to the current terminal.

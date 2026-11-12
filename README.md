@@ -60,8 +60,10 @@ for r in 1 2 3; do for d in 0 80 150; do ./scripts/30_test_performance.sh $d 300
 ./scripts/99_collect_evidence.sh
 ```
 Case V8 ran in a separate session: `00`, then `MODE=poc 01`, then `13`.
-The 3+3 scenario is described in `docs/README_3x3.md`; the super-region runs (both topologies, in a later
-session) in `docs/README_superregion.md`.
+Other runs, each with its own guide:
+- [3+3 scenario](docs/README_3x3.md)
+- [validation case V7](docs/README_admin_sens.md)
+- [super regions](docs/README_superregion.md) (both topologies, in a later session)
 
 ## Results
 | Folder | Content | Run date |
