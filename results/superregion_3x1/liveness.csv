@@ -1,0 +1,4 @@
+time,checkpoint,live_nodes
+2026-11-11 23:01:10,"cluster start",4
+2026-11-11 23:01:49,"isolation start (superregion)",4
+2026-11-11 23:06:40,"isolation end (superregion)",4

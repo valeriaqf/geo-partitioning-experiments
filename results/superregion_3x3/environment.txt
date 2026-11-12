@@ -1,0 +1,27 @@
+Date: 2026-11-11 23:16:03
+--- Machine
+Linux valeria 6.18.33.2-microsoft-standard-WSL2 #1 SMP PREEMPT_DYNAMIC Thu Jun 18 21:54:43 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
+CPUs: 6
+               total        used        free      shared  buff/cache   available
+Mem:           9.7Gi       5.1Gi       2.8Gi       4.0Mi       2.0Gi       4.6Gi
+Swap:          4.0Gi          0B       4.0Gi
+--- Docker
+Docker version 29.8.1, build 4a63305
+Docker Compose version v5.5.1
+--- CockroachDB
+Build Tag:        v26.2.6
+Build Time:       2026/08/24 17:36:16
+Distribution:     CCL
+Platform:         linux amd64 (x86_64-pc-linux-gnu)
+Go Version:       go1.25.13
+id	address	sql_address	build	started_at	updated_at	locality	attrs	is_available	is_live
+1	usa1:26257	usa1:26257	v26.2.6	2026-11-12 02:12:09.821076 +0000 UTC	2026-11-12 02:16:04.170001 +0000 UTC	region=usa,az=1	[]	true	true
+2	usa3:26257	usa3:26257	v26.2.6	2026-11-12 02:12:10.667764 +0000 UTC	2026-11-12 02:16:05.014128 +0000 UTC	region=usa,az=3	[]	true	true
+3	usa2:26257	usa2:26257	v26.2.6	2026-11-12 02:12:11.044782 +0000 UTC	2026-11-12 02:16:05.377942 +0000 UTC	region=usa,az=2	[]	true	true
+4	eur2:26257	eur2:26257	v26.2.6	2026-11-12 02:15:55.135265 +0000 UTC	2026-11-12 02:16:04.413809 +0000 UTC	region=eur,az=2	[]	true	true
+5	eur1:26257	eur1:26257	v26.2.6	2026-11-12 02:15:53.972844 +0000 UTC	2026-11-12 02:16:06.120761 +0000 UTC	region=eur,az=1	[]	true	true
+6	eur3:26257	eur3:26257	v26.2.6	2026-11-12 02:15:56.792308 +0000 UTC	2026-11-12 02:16:05.995771 +0000 UTC	region=eur,az=3	[]	true	true
+--- Image
+cockroachdb/cockroach:v26.2.6
+--- Placement mode loaded last
+superregion

@@ -1,0 +1,49 @@
+# Failover test, 3+3 scenario - 2026-11-10 17:28:02
+[liveness] failover eur3 start: 6/6 nodes live
+scenario               operation      gateway   status     duration
+
+## G0 - baseline (6 nodes)
+G0_baseline            read_usa       gw=usa1  OK         1.30s
+G0_baseline            read_eur       gw=usa1  OK         1.38s
+G0_baseline            write_usa      gw=usa1  OK         1.35s
+G0_baseline            write_eur      gw=usa1  OK         1.41s
+G0_baseline            read_global    gw=usa1  OK         1.26s
+G0_baseline            read_usa       gw=eur1  OK         1.33s
+G0_baseline            read_eur       gw=eur1  OK         1.20s
+G0_baseline            write_usa      gw=eur1  OK         1.27s
+G0_baseline            write_eur      gw=eur1  OK         1.53s
+G0_baseline            read_global    gw=eur1  OK         1.27s
+
+## G1 - one eur node down (eur2)
+G1_eur_node_down       read_usa       gw=usa1  OK         1.62s
+G1_eur_node_down       read_eur       gw=usa1  OK         2.07s
+G1_eur_node_down       write_usa      gw=usa1  OK         1.73s
+G1_eur_node_down       write_eur      gw=usa1  OK         2.31s
+G1_eur_node_down       read_global    gw=usa1  OK         2.26s
+G1_eur_node_down       read_usa       gw=eur1  OK         3.66s
+G1_eur_node_down       read_eur       gw=eur1  OK         5.77s
+G1_eur_node_down       write_usa      gw=eur1  OK         3.80s
+G1_eur_node_down       write_eur      gw=eur1  OK         1.31s
+G1_eur_node_down       read_global    gw=eur1  OK         1.15s
+[liveness] failover eur3 after G1 (eur2 back): 6/6 nodes live
+
+## G2 - eur region down (eur1, eur2, eur3)
+G2_eur_region_down     read_usa       gw=usa1  OK         5.92s
+G2_eur_region_down     read_eur       gw=usa1  ERROR: ERR 22.14s
+G2_eur_region_down     write_usa      gw=usa1  TIMEOUT    25.04s
+G2_eur_region_down     write_eur      gw=usa1  TIMEOUT    25.02s
+G2_eur_region_down     read_global    gw=usa1  TIMEOUT    25.03s
+eur1..3 restarted; measuring time until eur rows are readable again...
+Recovered in 9s
+
+[liveness] failover eur3 end: 6/6 nodes live
+
+Cluster at the end:
+id	address	sql_address	build	started_at	updated_at	locality	attrs	is_available	is_live
+1	usa1:26257	usa1:26257	v26.2.6	2026-11-10 20:18:33.051179 +0000 UTC	2026-11-10 20:31:30.16405 +0000 UTC	region=usa,az=1	[]	true	true
+2	eur3:26257	eur3:26257	v26.2.6	2026-11-10 20:31:19.229636 +0000 UTC	2026-11-10 20:31:28.494576 +0000 UTC	region=eur,az=3	[]	true	true
+3	eur1:26257	eur1:26257	v26.2.6	2026-11-10 20:31:15.6049 +0000 UTC	2026-11-10 20:31:27.824883 +0000 UTC	region=eur,az=1	[]	true	true
+4	usa2:26257	usa2:26257	v26.2.6	2026-11-10 20:18:34.828025 +0000 UTC	2026-11-10 20:31:28.92375 +0000 UTC	region=usa,az=2	[]	true	true
+5	usa3:26257	usa3:26257	v26.2.6	2026-11-10 20:18:35.37521 +0000 UTC	2026-11-10 20:31:29.484047 +0000 UTC	region=usa,az=3	[]	true	true
+6	eur2:26257	eur2:26257	v26.2.6	2026-11-10 20:31:18.575042 +0000 UTC	2026-11-10 20:31:28.131029 +0000 UTC	region=eur,az=2	[]	true	true
+Results in /home/valeria/geo-partitioning-experiments/results/failover_eur3.csv and /home/valeria/geo-partitioning-experiments/results/failover_eur3_20261110_172802.log

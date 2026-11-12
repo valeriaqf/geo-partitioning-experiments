@@ -1,0 +1,52 @@
+# Validation case V7 (admin_sens) - schema mode: poc - 2026-11-10 21:43:36
+[liveness] admin_sens start: 4/4 nodes live
+
+### Creating profile admin_sens
+SET
+CREATE ROLE
+GRANT
+GRANT
+
+### Access of admin_sens through node usa1 (administrator located in region usa)
+--- admin_sens reads patients of region usa | expected=ok actual=ok => PASS
+  count
+---------
+   1000
+(1 row)
+--- admin_sens reads patients of region eur | expected=ok actual=ok => PASS
+  count
+---------
+   1000
+(1 row)
+--- admin_sens: eur view has 1000 rows | expected=1000 actual=1000 => PASS
+--- admin_sens cannot read the base table patients | expected=error actual=error => PASS
+ERROR: user admin_sens does not have SELECT privilege on relation patients
+SQLSTATE: 42501
+Failed running "sql"
+--- admin_sens cannot read the base table doctors | expected=error actual=error => PASS
+ERROR: user admin_sens does not have SELECT privilege on relation doctors
+SQLSTATE: 42501
+Failed running "sql"
+
+### Storage of the eur rows after the cross-region read
+converged in 1s: [region=eur]
+--- patients: eur rows still stored only in eur after the read | expected=[region=eur] actual=[region=eur] => PASS
+(informational) leaseholder and replicas of that eur row:
+  lease_holder_locality | replica_localities
+------------------------+----------------------
+  region=eur,az=1       | {"region=eur,az=1"}
+(1 row)
+
+[liveness] admin_sens end: 4/4 nodes live
+
+### Summary (validation case V7)
+case                                                              expected      actual        result
+"admin_sens reads patients of region usa"                     ok            ok            PASS
+"admin_sens reads patients of region eur"                     ok            ok            PASS
+"admin_sens: eur view has 1000 rows"                              1000          1000          PASS
+"admin_sens cannot read the base table patients"              error         error         PASS
+"admin_sens cannot read the base table doctors"                error         error         PASS
+"patients: eur rows still stored only in eur after the read"  "region=eur"  "region=eur"  PASS
+
+PASS: 6   FAIL: 0   NOT_VERIFIED: 0
+Log saved to /home/valeria/geo-partitioning-experiments/results/isolation_admin_sens_20261110_214336.log

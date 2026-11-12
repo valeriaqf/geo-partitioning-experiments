@@ -1,0 +1,56 @@
+name: crdb-geo
+
+# Local CockroachDB cluster simulating two regions:
+#   region "usa": 3 nodes (usa1, usa2, usa3)   region "eur": 1 node (eur1)
+# Pin the image version for reproducibility and record it in the thesis:
+#   default: v26.2.6, the version used in the thesis runs (override with export CRDB_IMAGE=...)
+
+x-crdb: &crdb
+  image: ${CRDB_IMAGE:-cockroachdb/cockroach:v26.2.6}
+  networks:
+    - crdb-net
+  restart: "no"
+
+networks:
+  crdb-net:
+    name: crdb_geo_net
+    driver: bridge
+
+volumes:
+  usa1_data:
+  usa2_data:
+  usa3_data:
+  eur1_data:
+
+services:
+  usa1:
+    <<: *crdb
+    container_name: usa1
+    hostname: usa1
+    command: start --insecure --locality=region=usa,az=1 --join=usa1,usa2,usa3,eur1 --advertise-addr=usa1 --listen-addr=0.0.0.0:26257 --http-addr=0.0.0.0:8080
+    ports: ["26257:26257", "8080:8080"]
+    volumes: ["usa1_data:/cockroach/cockroach-data"]
+
+  usa2:
+    <<: *crdb
+    container_name: usa2
+    hostname: usa2
+    command: start --insecure --locality=region=usa,az=2 --join=usa1,usa2,usa3,eur1 --advertise-addr=usa2 --listen-addr=0.0.0.0:26257 --http-addr=0.0.0.0:8080
+    ports: ["26258:26257", "8081:8080"]
+    volumes: ["usa2_data:/cockroach/cockroach-data"]
+
+  usa3:
+    <<: *crdb
+    container_name: usa3
+    hostname: usa3
+    command: start --insecure --locality=region=usa,az=3 --join=usa1,usa2,usa3,eur1 --advertise-addr=usa3 --listen-addr=0.0.0.0:26257 --http-addr=0.0.0.0:8080
+    ports: ["26259:26257", "8082:8080"]
+    volumes: ["usa3_data:/cockroach/cockroach-data"]
+
+  eur1:
+    <<: *crdb
+    container_name: eur1
+    hostname: eur1
+    command: start --insecure --locality=region=eur,az=1 --join=usa1,usa2,usa3,eur1 --advertise-addr=eur1 --listen-addr=0.0.0.0:26257 --http-addr=0.0.0.0:8080
+    ports: ["26260:26257", "8083:8080"]
+    volumes: ["eur1_data:/cockroach/cockroach-data"]

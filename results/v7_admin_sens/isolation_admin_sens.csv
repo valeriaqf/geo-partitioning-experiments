@@ -1,0 +1,7 @@
+case,expected,actual,result
+"admin_sens reads patients of region usa",ok,ok,PASS
+"admin_sens reads patients of region eur",ok,ok,PASS
+"admin_sens: eur view has 1000 rows",1000,1000,PASS
+"admin_sens cannot read the base table patients",error,error,PASS
+"admin_sens cannot read the base table doctors",error,error,PASS
+"patients: eur rows still stored only in eur after the read","region=eur","region=eur",PASS

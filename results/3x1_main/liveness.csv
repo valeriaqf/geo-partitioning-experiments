@@ -1,0 +1,29 @@
+time,checkpoint,live_nodes
+2026-11-10 14:08:06,"cluster start",4
+2026-11-10 14:16:56,"isolation start (baseline)",4
+2026-11-10 14:25:38,"isolation end (baseline)",4
+2026-11-10 14:29:23,"isolation start (restricted)",4
+2026-11-10 14:33:56,"isolation end (restricted)",4
+2026-11-10 14:38:49,"isolation start (poc)",4
+2026-11-10 14:39:30,"isolation end (poc)",4
+2026-11-10 14:48:22,"failover start",4
+2026-11-10 14:49:02,"failover after F1 (usa3 back)",4
+2026-11-10 14:50:08,"failover end",4
+2026-11-10 14:53:48,"performance start (delay 0ms round 1)",4
+2026-11-10 14:54:20,"performance end (delay0ms_r1)",4
+2026-11-10 14:54:21,"performance start (delay 80ms round 1)",4
+2026-11-10 14:57:35,"performance end (delay80ms_r1)",4
+2026-11-10 14:57:36,"performance start (delay 150ms round 1)",4
+2026-11-10 15:03:05,"performance end (delay150ms_r1)",4
+2026-11-10 15:03:06,"performance start (delay 0ms round 2)",4
+2026-11-10 15:03:33,"performance end (delay0ms_r2)",4
+2026-11-10 15:03:35,"performance start (delay 80ms round 2)",4
+2026-11-10 15:06:43,"performance end (delay80ms_r2)",4
+2026-11-10 15:06:45,"performance start (delay 150ms round 2)",4
+2026-11-10 15:12:13,"performance end (delay150ms_r2)",4
+2026-11-10 15:12:15,"performance start (delay 0ms round 3)",4
+2026-11-10 15:12:41,"performance end (delay0ms_r3)",4
+2026-11-10 15:12:42,"performance start (delay 80ms round 3)",4
+2026-11-10 15:15:48,"performance end (delay80ms_r3)",4
+2026-11-10 15:15:50,"performance start (delay 150ms round 3)",4
+2026-11-10 15:21:17,"performance end (delay150ms_r3)",4

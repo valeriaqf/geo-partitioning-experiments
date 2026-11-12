@@ -1,0 +1,21 @@
+target	raw_config_sql
+RANGE liveness	"ALTER RANGE liveness CONFIGURE ZONE USING
+	range_min_bytes = 134217728,
+	range_max_bytes = 536870912,
+	gc.ttlseconds = 600,
+	num_replicas = 5,
+	constraints = '[]',
+	lease_preferences = '[]'"
+range_id	start_key	replica_localities
+1	/Min	"{""region=usa,az=1"",""region=eur,az=3"",""region=eur,az=1"",""region=usa,az=3"",""region=eur,az=2""}"
+2	"/Meta2/"""""	"{""region=usa,az=1"",""region=eur,az=3"",""region=eur,az=1"",""region=usa,az=2"",""region=eur,az=2""}"
+3	/System/NodeLiveness	"{""region=usa,az=1"",""region=eur,az=3"",""region=usa,az=2"",""region=usa,az=3"",""region=eur,az=2""}"
+4	/System/NodeLivenessMax	"{""region=usa,az=1"",""region=eur,az=3"",""region=eur,az=1"",""region=usa,az=2"",""region=usa,az=3""}"
+5	/System/tsd	"{""region=usa,az=1"",""region=usa,az=3"",""region=eur,az=2""}"
+6	"/System/""tse"""	"{""region=usa,az=1"",""region=eur,az=3"",""region=eur,az=1"",""region=usa,az=2"",""region=usa,az=3""}"
+7	/Table/0	"{""region=eur,az=3"",""region=eur,az=1"",""region=usa,az=2"",""region=usa,az=3"",""region=eur,az=2""}"
+9	/Table/4	"{""region=usa,az=1"",""region=eur,az=3"",""region=eur,az=1"",""region=usa,az=2"",""region=usa,az=3""}"
+10	/Table/5	"{""region=eur,az=3"",""region=eur,az=1"",""region=usa,az=2"",""region=usa,az=3"",""region=eur,az=2""}"
+11	/Table/6	"{""region=usa,az=1"",""region=eur,az=3"",""region=eur,az=1"",""region=usa,az=2"",""region=eur,az=2""}"
+12	/Table/7	"{""region=usa,az=1"",""region=eur,az=3"",""region=usa,az=2"",""region=usa,az=3"",""region=eur,az=2""}"
+13	/Table/8	"{""region=usa,az=1"",""region=eur,az=3"",""region=usa,az=2"",""region=usa,az=3"",""region=eur,az=2""}"

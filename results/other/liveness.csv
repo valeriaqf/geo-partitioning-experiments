@@ -1,0 +1,12 @@
+time,checkpoint,live_nodes
+2026-11-10 21:43:03,"cluster start",4
+2026-11-10 21:43:37,"admin_sens start",4
+2026-11-10 21:43:46,"admin_sens end",4
+2026-11-11 20:58:33,"cluster start",4
+2026-11-11 20:59:25,"write_restriction start",4
+2026-11-11 20:59:39,"write_restriction end",4
+2026-11-11 21:02:30,"write_restriction start",4
+2026-11-11 21:02:55,"write_restriction end",4
+2026-11-11 21:05:34,"cluster start",4
+2026-11-11 21:08:04,"write_restriction start",4
+2026-11-11 21:08:18,"write_restriction end",4

@@ -1,0 +1,13 @@
+scenario,gateway,data_region,operation,n,mean_ms,p50_ms,p95_ms,p99_ms
+interregion0ms,usa,usa,read_with_region,300,3.22,3.13,4.19,5.05
+interregion0ms,usa,usa,read_without_region,300,3.11,3.01,3.8,4.43
+interregion0ms,usa,usa,write,300,6.16,6.04,7.28,8.18
+interregion0ms,usa,eur,read_with_region,300,83.44,83.29,84.56,85.48
+interregion0ms,usa,eur,read_without_region,300,85.28,84.49,86.37,88.9
+interregion0ms,usa,eur,write,300,86.12,85.08,87.13,154.23
+interregion0ms,eur,usa,read_with_region,300,83.74,83.3,84.41,86.24
+interregion0ms,eur,usa,read_without_region,300,83.54,83.43,84.23,85.59
+interregion0ms,eur,usa,write,300,65.35,86.13,88.06,118.9
+interregion0ms,eur,eur,read_with_region,300,2.43,2.36,3.02,3.46
+interregion0ms,eur,eur,read_without_region,300,2.43,2.38,2.84,3.47
+interregion0ms,eur,eur,write,300,4.45,4.2,6.6,8.8

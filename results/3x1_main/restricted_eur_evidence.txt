@@ -1,0 +1,12 @@
+target	raw_config_sql
+PARTITION eur OF INDEX geo_db.public.patients@patients_pkey	"ALTER PARTITION eur OF INDEX geo_db.public.patients@patients_pkey CONFIGURE ZONE USING
+	range_min_bytes = 134217728,
+	range_max_bytes = 536870912,
+	gc.ttlseconds = 14400,
+	num_replicas = 3,
+	num_voters = 3,
+	constraints = '[]',
+	voter_constraints = '[+region=eur]',
+	lease_preferences = '[[+region=eur]]'"
+start_key	end_key	range_id	lease_holder	lease_holder_locality	replicas	replica_localities	voting_replicas	non_voting_replicas
+"…/""@"""	"…/""@""/PrefixEnd"	95	2	region=eur,az=1	{1,2,4}	"{""region=usa,az=1"",""region=eur,az=1"",""region=usa,az=2""}"	{4,1,2}	{}

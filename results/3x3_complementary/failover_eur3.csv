@@ -1,0 +1,27 @@
+scenario,operation,gateway,status,duration_s
+"G0_baseline","read_usa",usa1,"OK",1.30
+"G0_baseline","read_eur",usa1,"OK",1.38
+"G0_baseline","write_usa",usa1,"OK",1.35
+"G0_baseline","write_eur",usa1,"OK",1.41
+"G0_baseline","read_global",usa1,"OK",1.26
+"G0_baseline","read_usa",eur1,"OK",1.33
+"G0_baseline","read_eur",eur1,"OK",1.20
+"G0_baseline","write_usa",eur1,"OK",1.27
+"G0_baseline","write_eur",eur1,"OK",1.53
+"G0_baseline","read_global",eur1,"OK",1.27
+"G1_eur_node_down","read_usa",usa1,"OK",1.62
+"G1_eur_node_down","read_eur",usa1,"OK",2.07
+"G1_eur_node_down","write_usa",usa1,"OK",1.73
+"G1_eur_node_down","write_eur",usa1,"OK",2.31
+"G1_eur_node_down","read_global",usa1,"OK",2.26
+"G1_eur_node_down","read_usa",eur1,"OK",3.66
+"G1_eur_node_down","read_eur",eur1,"OK",5.77
+"G1_eur_node_down","write_usa",eur1,"OK",3.80
+"G1_eur_node_down","write_eur",eur1,"OK",1.31
+"G1_eur_node_down","read_global",eur1,"OK",1.15
+"G2_eur_region_down","read_usa",usa1,"OK",5.92
+"G2_eur_region_down","read_eur",usa1,"ERROR: ERROR: query execution canceled due to statement timeout SQLSTATE: 570",22.14
+"G2_eur_region_down","write_usa",usa1,"TIMEOUT",25.04
+"G2_eur_region_down","write_eur",usa1,"TIMEOUT",25.02
+"G2_eur_region_down","read_global",usa1,"TIMEOUT",25.03
+"G2_eur_region_down","recovery_time",usa1,"OK",9

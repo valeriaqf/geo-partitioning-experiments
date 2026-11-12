@@ -1,0 +1,73 @@
+# Validation case V8 (write restriction) - schema mode: poc - 2026-11-11 21:08:03
+[liveness] write_restriction start: 4/4 nodes live
+
+### Applying the write policies
+SET
+GRANT
+NOTICE: waiting for job(s) to complete: 1226741138716491777
+If the statement is canceled, jobs will continue in the background.
+ALTER TABLE
+DROP POLICY
+NOTICE: policy "write_own_region_usa" for relation "patients" does not exist, skipping
+NOTICE: policy "write_own_region_eur" for relation "patients" does not exist, skipping
+DROP POLICY
+NOTICE: waiting for job(s) to complete: 1226741140528889857
+If the statement is canceled, jobs will continue in the background.
+CREATE POLICY
+NOTICE: waiting for job(s) to complete: 1226741142372712449
+If the statement is canceled, jobs will continue in the background.
+CREATE POLICY
+          name         |  cmd   |    type    |   roles   | using_expr |                  with_check_expr
+-----------------------+--------+------------+-----------+------------+----------------------------------------------------
+  write_own_region_eur | INSERT | permissive | {app_eur} |            | crdb_region = 'eur':::public.crdb_internal_region
+  write_own_region_usa | INSERT | permissive | {app_usa} |            | crdb_region = 'usa':::public.crdb_internal_region
+(2 rows)
+
+### Writes of the regional profiles
+--- app_usa writes a usa row (gateway usa1) | expected=ok actual=ok => PASS
+INSERT 0 1
+--- app_usa cannot write an eur row (gateway usa1) | expected=denied_by_policy actual=denied_by_policy => PASS
+ERROR: new row violates row-level security policy for table "patients"
+SQLSTATE: 42501
+Failed running "sql"
+--- app_usa cannot write an eur row even through eur1 | expected=denied_by_policy actual=denied_by_policy => PASS
+ERROR: new row violates row-level security policy for table "patients"
+SQLSTATE: 42501
+Failed running "sql"
+--- app_eur writes an eur row (gateway eur1) | expected=ok actual=ok => PASS
+INSERT 0 1
+--- app_eur cannot write a usa row (gateway eur1) | expected=denied_by_policy actual=denied_by_policy => PASS
+ERROR: new row violates row-level security policy for table "patients"
+SQLSTATE: 42501
+Failed running "sql"
+--- app_usa cannot move a row to another region (no UPDATE) | expected=error actual=error => PASS
+ERROR: user app_usa does not have UPDATE privilege on relation patients
+SQLSTATE: 42501
+Failed running "sql"
+
+### Nothing was written by the denied attempts
+--- no row from the denied attempts | expected=0 actual=0 => PASS
+
+### Reads through the views still work (views run with the owner's privileges)
+--- app_usa still reads its own view (at least 1000 rows) | expected=1 actual=1 => PASS
+
+### Storage of the new eur row
+converged in 1s: [region=eur]
+--- patients: new eur row stored only in eur | expected=[region=eur] actual=[region=eur] => PASS
+
+[liveness] write_restriction end: 4/4 nodes live
+
+### Summary (validation case V8)
+case                                                       expected          actual            result
+"app_usa writes a usa row (gateway usa1)"                  ok                ok                PASS
+"app_usa cannot write an eur row (gateway usa1)"           denied_by_policy  denied_by_policy  PASS
+"app_usa cannot write an eur row even through eur1"        denied_by_policy  denied_by_policy  PASS
+"app_eur writes an eur row (gateway eur1)"                 ok                ok                PASS
+"app_eur cannot write a usa row (gateway eur1)"            denied_by_policy  denied_by_policy  PASS
+"app_usa cannot move a row to another region (no UPDATE)"  error             error             PASS
+"no row from the denied attempts"                          0                 0                 PASS
+"app_usa still reads its own view (at least 1000 rows)"    1                 1                 PASS
+"patients: new eur row stored only in eur"             "region=eur"      "region=eur"      PASS
+
+PASS: 9   FAIL: 0   NOT_VERIFIED: 0
+Log saved to /home/valeria/geo-partitioning-experiments/results/isolation_write_restriction_20261111_210803.log

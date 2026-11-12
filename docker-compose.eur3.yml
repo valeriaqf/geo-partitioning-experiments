@@ -1,0 +1,31 @@
+# Complementary 3+3 scenario: adds eur2 and eur3, so region "eur" has 3 nodes in 3 zones.
+# Use together with the main file:
+#   export COMPOSE_FILE=docker-compose.yml:docker-compose.eur3.yml
+# (the main 3+1 setup does not use this file)
+
+volumes:
+  eur2_data:
+  eur3_data:
+
+services:
+  eur2:
+    image: ${CRDB_IMAGE:-cockroachdb/cockroach:v26.2.6}
+    networks:
+      - crdb-net
+    restart: "no"
+    container_name: eur2
+    hostname: eur2
+    command: start --insecure --locality=region=eur,az=2 --join=usa1,usa2,usa3,eur1,eur2,eur3 --advertise-addr=eur2 --listen-addr=0.0.0.0:26257 --http-addr=0.0.0.0:8080
+    ports: ["26261:26257", "8084:8080"]
+    volumes: ["eur2_data:/cockroach/cockroach-data"]
+
+  eur3:
+    image: ${CRDB_IMAGE:-cockroachdb/cockroach:v26.2.6}
+    networks:
+      - crdb-net
+    restart: "no"
+    container_name: eur3
+    hostname: eur3
+    command: start --insecure --locality=region=eur,az=3 --join=usa1,usa2,usa3,eur1,eur2,eur3 --advertise-addr=eur3 --listen-addr=0.0.0.0:26257 --http-addr=0.0.0.0:8080
+    ports: ["26262:26257", "8085:8080"]
+    volumes: ["eur3_data:/cockroach/cockroach-data"]

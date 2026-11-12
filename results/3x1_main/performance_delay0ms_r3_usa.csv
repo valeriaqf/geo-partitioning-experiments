@@ -1,0 +1,7 @@
+scenario,gateway,data_region,operation,n,mean_ms,p50_ms,p95_ms,p99_ms
+delay0ms_r3,usa,usa,read_with_region,300,3.19,3.17,3.69,4.01
+delay0ms_r3,usa,usa,read_without_region,300,3.21,3.17,3.68,4.26
+delay0ms_r3,usa,usa,write,300,6.67,6.49,8.21,10.37
+delay0ms_r3,usa,eur,read_with_region,300,3.04,3.0,3.56,3.97
+delay0ms_r3,usa,eur,read_without_region,300,4.32,4.2,5.22,7.1
+delay0ms_r3,usa,eur,write,300,4.89,4.81,5.56,6.04

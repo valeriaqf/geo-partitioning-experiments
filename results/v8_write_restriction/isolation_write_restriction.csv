@@ -1,0 +1,10 @@
+case,expected,actual,result
+"app_usa writes a usa row (gateway usa1)",ok,ok,PASS
+"app_usa cannot write an eur row (gateway usa1)",denied_by_policy,denied_by_policy,PASS
+"app_usa cannot write an eur row even through eur1",denied_by_policy,denied_by_policy,PASS
+"app_eur writes an eur row (gateway eur1)",ok,ok,PASS
+"app_eur cannot write a usa row (gateway eur1)",denied_by_policy,denied_by_policy,PASS
+"app_usa cannot move a row to another region (no UPDATE)",error,error,PASS
+"no row from the denied attempts",0,0,PASS
+"app_usa still reads its own view (at least 1000 rows)",1,1,PASS
+"patients: new eur row stored only in eur","region=eur","region=eur",PASS

@@ -1,0 +1,9 @@
+time,checkpoint,live_nodes
+2026-11-10 17:18:39,"cluster start",6
+2026-11-10 17:20:35,"isolation start (restricted)",6
+2026-11-10 17:21:32,"isolation end (restricted)",6
+2026-11-10 17:23:21,"isolation start (poc3)",6
+2026-11-10 17:25:42,"isolation end (poc3)",6
+2026-11-10 17:28:04,"failover eur3 start",6
+2026-11-10 17:29:10,"failover eur3 after G1 (eur2 back)",6
+2026-11-10 17:31:29,"failover eur3 end",6

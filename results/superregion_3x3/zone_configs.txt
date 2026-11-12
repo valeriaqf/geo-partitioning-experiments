@@ -1,0 +1,49 @@
+                                     target                                     |                                              raw_config_sql
+--------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------
+  DATABASE geo_db                                                               | ALTER DATABASE geo_db CONFIGURE ZONE USING
+                                                                                |     num_replicas = 4,
+                                                                                |     num_voters = 3,
+                                                                                |     constraints = '{+region=eur: 1, +region=usa: 1}',
+                                                                                |     voter_constraints = '[+region=usa]',
+                                                                                |     lease_preferences = '[[+region=usa]]'
+  TABLE geo_db.public.research_projects                                                   | ALTER TABLE geo_db.public.research_projects CONFIGURE ZONE USING
+                                                                                |     global_reads = true
+  TABLE geo_db.public.units                                                     | ALTER TABLE geo_db.public.units CONFIGURE ZONE USING
+                                                                                |     global_reads = true
+  PARTITION eur OF INDEX geo_db.public.doctors@doctors_pkey               | ALTER PARTITION eur OF INDEX geo_db.public.doctors@doctors_pkey CONFIGURE ZONE USING
+                                                                                |     num_replicas = 3,
+                                                                                |     num_voters = 3,
+                                                                                |     constraints = '{+region=eur: 3}',
+                                                                                |     voter_constraints = '[+region=eur]',
+                                                                                |     lease_preferences = '[[+region=eur]]'
+  PARTITION usa OF INDEX geo_db.public.doctors@doctors_pkey               | ALTER PARTITION usa OF INDEX geo_db.public.doctors@doctors_pkey CONFIGURE ZONE USING
+                                                                                |     num_replicas = 3,
+                                                                                |     num_voters = 3,
+                                                                                |     constraints = '{+region=usa: 3}',
+                                                                                |     voter_constraints = '[+region=usa]',
+                                                                                |     lease_preferences = '[[+region=usa]]'
+  PARTITION eur OF INDEX geo_db.public.patients@patients_pkey           | ALTER PARTITION eur OF INDEX geo_db.public.patients@patients_pkey CONFIGURE ZONE USING
+                                                                                |     num_replicas = 3,
+                                                                                |     num_voters = 3,
+                                                                                |     constraints = '{+region=eur: 3}',
+                                                                                |     voter_constraints = '[+region=eur]',
+                                                                                |     lease_preferences = '[[+region=eur]]'
+  PARTITION usa OF INDEX geo_db.public.patients@patients_pkey           | ALTER PARTITION usa OF INDEX geo_db.public.patients@patients_pkey CONFIGURE ZONE USING
+                                                                                |     num_replicas = 3,
+                                                                                |     num_voters = 3,
+                                                                                |     constraints = '{+region=usa: 3}',
+                                                                                |     voter_constraints = '[+region=usa]',
+                                                                                |     lease_preferences = '[[+region=usa]]'
+  PARTITION eur OF INDEX geo_db.public.doctor_research_projects@doctor_research_projects_pkey | ALTER PARTITION eur OF INDEX geo_db.public.doctor_research_projects@doctor_research_projects_pkey CONFIGURE ZONE USING
+                                                                                |     num_replicas = 3,
+                                                                                |     num_voters = 3,
+                                                                                |     constraints = '{+region=eur: 3}',
+                                                                                |     voter_constraints = '[+region=eur]',
+                                                                                |     lease_preferences = '[[+region=eur]]'
+  PARTITION usa OF INDEX geo_db.public.doctor_research_projects@doctor_research_projects_pkey | ALTER PARTITION usa OF INDEX geo_db.public.doctor_research_projects@doctor_research_projects_pkey CONFIGURE ZONE USING
+                                                                                |     num_replicas = 3,
+                                                                                |     num_voters = 3,
+                                                                                |     constraints = '{+region=usa: 3}',
+                                                                                |     voter_constraints = '[+region=usa]',
+                                                                                |     lease_preferences = '[[+region=usa]]'
+(9 rows)

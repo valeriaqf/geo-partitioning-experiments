@@ -1,0 +1,7 @@
+time,checkpoint,live_nodes
+2026-11-11 23:12:12,"cluster start",6
+2026-11-11 23:12:34,"isolation start (superregion)",6
+2026-11-11 23:13:46,"isolation end (superregion)",6
+2026-11-11 23:13:46,"failover eur3 start",6
+2026-11-11 23:14:31,"failover eur3 after G1 (eur2 back)",6
+2026-11-11 23:16:02,"failover eur3 end",6

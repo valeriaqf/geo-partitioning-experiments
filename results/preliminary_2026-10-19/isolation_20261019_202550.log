@@ -1,0 +1,110 @@
+# Isolation test - 2026-10-19 20:25:50
+
+### A1. Database regions
+  database | region | primary | secondary |  zones
+-----------+--------+---------+-----------+----------
+  geo_db   | usa    |    t    |     f     | {1,2,3}
+  geo_db   | eur    |    f    |     f     | {1}
+(2 rows)
+
+### A2. Rows per region
+         tbl        | crdb_region | count
+--------------------+-------------+--------
+  patients      | eur         |  1000
+  patients      | usa         |  1000
+  doctor_research_projects | eur         |   300
+  doctor_research_projects | usa         |   300
+  doctors        | eur         |   100
+  doctors        | usa         |   100
+(6 rows)
+
+### A3. Ranges and replica localities of table patients
+                start_key                | lease_holder_locality |                            replica_localities
+-----------------------------------------+-----------------------+----------------------------------------------------------------------------
+  <before:/Table/110/1/"\x80"/PrefixEnd> | region=usa,az=1       | {"region=usa,az=1","region=usa,az=3","region=usa,az=2","region=eur,az=1"}
+  …/1/"@"                                | region=eur,az=1       | {"region=eur,az=1"}
+  …/1/"@"/PrefixEnd                      | region=usa,az=1       | {"region=usa,az=1","region=usa,az=3","region=usa,az=2","region=eur,az=1"}
+  …/1/"\x80"                             | region=usa,az=1       | {"region=usa,az=1","region=usa,az=3","region=usa,az=2"}
+  …/1/"\x80"/PrefixEnd                   | region=usa,az=3       | {"region=usa,az=1","region=usa,az=3","region=usa,az=2","region=eur,az=1"}
+(5 rows)
+
+### A4. Automatic check of physical replica placement (waits up to 180 s per region)
+converged in 1s: [region=eur]
+converged in 1s: [region=usa]
+--- replicas of eur rows stay only in eur | expected=[region=eur] actual=[region=eur] => PASS
+--- replicas of usa rows stay only in usa | expected=[region=usa] actual=[region=usa] => PASS
+
+### B. Role-based access control
+--- app_usa reads patients of its own region | expected=ok actual=ok => PASS
+  count
+---------
+   1000
+(1 row)
+--- app_usa cannot read the base table | expected=error actual=error => PASS
+ERROR: user app_usa does not have SELECT privilege on relation patients
+SQLSTATE: 42501
+Failed running "sql"
+--- app_usa cannot read the other region's view | expected=error actual=error => PASS
+ERROR: user app_usa does not have SELECT privilege on relation v_patients_eur
+SQLSTATE: 42501
+Failed running "sql"
+--- app_usa: usa view has 1000 rows | expected=1000 actual=1000 => PASS
+--- app_usa: no EUR rows in usa view | expected=0 actual=0 => PASS
+--- app_eur reads patients of its own region | expected=ok actual=ok => PASS
+  count
+---------
+   1000
+(1 row)
+--- app_eur cannot read the base table | expected=error actual=error => PASS
+ERROR: user app_eur does not have SELECT privilege on relation patients
+SQLSTATE: 42501
+Failed running "sql"
+--- app_eur cannot read the other region's view | expected=error actual=error => PASS
+ERROR: user app_eur does not have SELECT privilege on relation v_patients_usa
+SQLSTATE: 42501
+Failed running "sql"
+--- app_eur: eur view has 1000 rows | expected=1000 actual=1000 => PASS
+--- app_eur: no USA rows in eur view | expected=0 actual=0 => PASS
+--- admin_meta reads consolidated metadata | expected=ok actual=ok => PASS
+  region |    table_name     | row_count
+---------+-------------------+------------
+  eur    | patients      |      1000
+  eur    | doctor_research_projects |       300
+  eur    | doctors        |       100
+  usa    | patients      |      1000
+  usa    | doctor_research_projects |       300
+  usa    | doctors        |       100
+--- admin_meta cannot read patients (usa) | expected=error actual=error => PASS
+ERROR: user admin_meta does not have SELECT privilege on relation v_patients_usa
+SQLSTATE: 42501
+Failed running "sql"
+--- admin_meta cannot read patients (eur) | expected=error actual=error => PASS
+ERROR: user admin_meta does not have SELECT privilege on relation v_patients_eur
+SQLSTATE: 42501
+Failed running "sql"
+--- admin_meta cannot read doctors (base) | expected=error actual=error => PASS
+ERROR: user admin_meta does not have SELECT privilege on relation doctors
+SQLSTATE: 42501
+Failed running "sql"
+
+### Summary
+case                                            expected      actual        result
+"replicas of eur rows stay only in eur"         "region=eur"  "region=eur"  PASS
+"replicas of usa rows stay only in usa"         "region=usa"  "region=usa"  PASS
+"app_usa reads patients of its own region"  ok            ok            PASS
+"app_usa cannot read the base table"            error         error         PASS
+"app_usa cannot read the other region's view"   error         error         PASS
+"app_usa: usa view has 1000 rows"               1000          1000          PASS
+"app_usa: no EUR rows in usa view"              0             0             PASS
+"app_eur reads patients of its own region"  ok            ok            PASS
+"app_eur cannot read the base table"            error         error         PASS
+"app_eur cannot read the other region's view"   error         error         PASS
+"app_eur: eur view has 1000 rows"               1000          1000          PASS
+"app_eur: no USA rows in eur view"              0             0             PASS
+"admin_meta reads consolidated metadata"        ok            ok            PASS
+"admin_meta cannot read patients (usa)"     error         error         PASS
+"admin_meta cannot read patients (eur)"     error         error         PASS
+"admin_meta cannot read doctors (base)"      error         error         PASS
+
+PASS: 16   FAIL: 0   NOT_VERIFIED: 0
+Log saved to /home/valeria/crdb-geo-experiments/results/isolation_20261019_202550.log

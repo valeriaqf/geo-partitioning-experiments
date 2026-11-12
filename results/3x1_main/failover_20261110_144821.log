@@ -1,0 +1,47 @@
+# Failover test - 2026-11-10 14:48:21
+[liveness] failover start: 4/4 nodes live
+scenario             operation      gateway   status     duration
+
+## F0 - baseline
+F0_baseline          read_usa       gw=usa1  OK         0.72s
+F0_baseline          read_eur       gw=usa1  OK         0.73s
+F0_baseline          write_usa      gw=usa1  OK         0.75s
+F0_baseline          write_eur      gw=usa1  OK         0.80s
+F0_baseline          read_global    gw=usa1  OK         0.72s
+F0_baseline          read_usa       gw=eur1  OK         0.88s
+F0_baseline          read_eur       gw=eur1  OK         0.80s
+F0_baseline          write_usa      gw=eur1  OK         0.78s
+F0_baseline          write_eur      gw=eur1  OK         0.78s
+F0_baseline          read_global    gw=eur1  OK         0.79s
+
+## F1 - one usa node down (usa3)
+F1_usa_node_down     read_usa       gw=usa1  OK         0.76s
+F1_usa_node_down     read_eur       gw=usa1  OK         0.69s
+F1_usa_node_down     write_usa      gw=usa1  OK         0.69s
+F1_usa_node_down     write_eur      gw=usa1  OK         0.76s
+F1_usa_node_down     read_global    gw=usa1  OK         0.72s
+F1_usa_node_down     read_usa       gw=eur1  OK         0.68s
+F1_usa_node_down     read_eur       gw=eur1  OK         0.73s
+F1_usa_node_down     write_usa      gw=eur1  OK         0.68s
+F1_usa_node_down     write_eur      gw=eur1  OK         0.78s
+F1_usa_node_down     read_global    gw=eur1  OK         0.69s
+[liveness] failover after F1 (usa3 back): 4/4 nodes live
+
+## F2 - eur region down (eur1 is the only eur node)
+F2_eur_region_down   read_usa       gw=usa1  OK         0.70s
+F2_eur_region_down   read_eur       gw=usa1  ERROR: ERR 21.75s
+F2_eur_region_down   write_usa      gw=usa1  OK         0.68s
+F2_eur_region_down   write_eur      gw=usa1  ERROR: ERR 20.68s
+F2_eur_region_down   read_global    gw=usa1  OK         0.67s
+eur1 restarted; measuring time until eur rows are readable again...
+Recovered in 3s
+
+[liveness] failover end: 4/4 nodes live
+
+Cluster at the end:
+id	address	sql_address	build	started_at	updated_at	locality	attrs	is_available	is_live
+1	usa1:26257	usa1:26257	v26.2.6	2026-11-10 17:07:58.490383 +0000 UTC	2026-11-10 17:50:07.373944 +0000 UTC	region=usa,az=1	[]	true	true
+2	eur1:26257	eur1:26257	v26.2.6	2026-11-10 17:50:05.37534 +0000 UTC	2026-11-10 17:50:08.440727 +0000 UTC	region=eur,az=1	[]	true	true
+3	usa3:26257	usa3:26257	v26.2.6	2026-11-10 17:48:56.524154 +0000 UTC	2026-11-10 17:50:07.683103 +0000 UTC	region=usa,az=3	[]	true	true
+4	usa2:26257	usa2:26257	v26.2.6	2026-11-10 17:08:01.288306 +0000 UTC	2026-11-10 17:50:07.183887 +0000 UTC	region=usa,az=2	[]	true	true
+Results in /home/valeria/geo-partitioning-experiments/results/failover.csv and /home/valeria/geo-partitioning-experiments/results/failover_20261110_144821.log

@@ -1,0 +1,27 @@
+scenario,operation,gateway,status,duration_s
+"G0_baseline","read_usa",usa1,"OK",0.83
+"G0_baseline","read_eur",usa1,"OK",0.86
+"G0_baseline","write_usa",usa1,"OK",0.87
+"G0_baseline","write_eur",usa1,"OK",1.14
+"G0_baseline","read_global",usa1,"OK",1.32
+"G0_baseline","read_usa",eur1,"OK",1.30
+"G0_baseline","read_eur",eur1,"OK",1.14
+"G0_baseline","write_usa",eur1,"OK",1.21
+"G0_baseline","write_eur",eur1,"OK",0.99
+"G0_baseline","read_global",eur1,"OK",1.09
+"G1_eur_node_down","read_usa",usa1,"OK",0.79
+"G1_eur_node_down","read_eur",usa1,"OK",0.89
+"G1_eur_node_down","write_usa",usa1,"OK",1.05
+"G1_eur_node_down","write_eur",usa1,"OK",0.97
+"G1_eur_node_down","read_global",usa1,"OK",0.90
+"G1_eur_node_down","read_usa",eur1,"OK",0.93
+"G1_eur_node_down","read_eur",eur1,"OK",0.86
+"G1_eur_node_down","write_usa",eur1,"OK",1.34
+"G1_eur_node_down","write_eur",eur1,"OK",1.47
+"G1_eur_node_down","read_global",eur1,"OK",1.51
+"G2_eur_region_down","read_usa",usa1,"OK",0.87
+"G2_eur_region_down","read_eur",usa1,"ERROR: ERROR: query execution canceled due to statement timeout SQLSTATE: 570",20.82
+"G2_eur_region_down","write_usa",usa1,"ERROR: ERROR: remote wall time is too far ahead (1.283280353s) to be trustwor",-0.84
+"G2_eur_region_down","write_eur",usa1,"ERROR: ERROR: query execution canceled due to statement timeout SQLSTATE: 570",20.76
+"G2_eur_region_down","read_global",usa1,"TIMEOUT",23.49
+"G2_eur_region_down","recovery_time",usa1,"OK",6

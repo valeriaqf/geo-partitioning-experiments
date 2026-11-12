@@ -1,0 +1,13 @@
+scenario,gateway,data_region,operation,n,mean_ms,p50_ms,p95_ms,p99_ms
+delay80ms,usa,usa,read_with_region,300,2.56,2.47,3.34,4.83
+delay80ms,usa,usa,read_without_region,300,2.58,2.49,3.3,4.15
+delay80ms,usa,usa,write,300,5.77,5.63,7.08,8.67
+delay80ms,usa,eur,read_with_region,300,83.14,83.08,83.78,84.3
+delay80ms,usa,eur,read_without_region,300,85.01,83.41,86.27,120.5
+delay80ms,usa,eur,write,300,86.17,84.94,86.79,150.01
+delay80ms,eur,usa,read_with_region,300,163.28,163.1,164.03,165.7
+delay80ms,eur,usa,read_without_region,300,163.43,163.33,164.13,164.99
+delay80ms,eur,usa,write,300,167.06,166.18,167.98,204.66
+delay80ms,eur,eur,read_with_region,300,82.22,82.17,82.57,83.1
+delay80ms,eur,eur,read_without_region,300,82.25,82.2,82.72,83.56
+delay80ms,eur,eur,write,300,84.84,84.02,84.87,151.02
